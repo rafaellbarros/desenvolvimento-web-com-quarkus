@@ -28,3 +28,9 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/cadastro-0.0.1-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+
+## Adicionando dependencias do projeto
+
+```
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-jdbc-postgresql, io.quarkus:quarkus-hibernate-orm-panache, io.quarkus:quarkus-resteasy-jsonb, io.quarkus:quarkus-smallrye-openapi, io.quarkus:quarkus-hibernate-validator"
+```
