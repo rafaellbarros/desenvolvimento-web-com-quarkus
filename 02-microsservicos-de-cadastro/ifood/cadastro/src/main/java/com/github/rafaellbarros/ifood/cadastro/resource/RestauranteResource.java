@@ -1,10 +1,13 @@
 package com.github.rafaellbarros.ifood.cadastro.resource;
 
+import com.github.rafaellbarros.ifood.cadastro.model.dto.AdicionarRestauranteDTO;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Prato;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
+import com.github.rafaellbarros.ifood.cadastro.model.mapper.RestauranteMapper;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,6 +21,9 @@ import java.util.Optional;
 @Tag(name = "restaurante")
 public class RestauranteResource {
 
+    @Inject
+    private RestauranteMapper mapper;
+
     @GET
     public List<Restaurante> listarTodos() {
         return Restaurante.listAll();
@@ -25,7 +31,8 @@ public class RestauranteResource {
 
     @POST
     @Transactional
-    public void adicionar(Restaurante restaurante) {
+    public void adicionar(AdicionarRestauranteDTO dto) {
+        final Restaurante restaurante = mapper.toRestaurante(dto);
         restaurante.persist();
     }
 
