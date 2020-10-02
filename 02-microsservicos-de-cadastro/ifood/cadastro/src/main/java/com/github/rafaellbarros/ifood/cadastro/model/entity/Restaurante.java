@@ -26,7 +26,7 @@ public class Restaurante extends PanacheEntityBase {
     public Localizacao localizacao;
 
     @CreationTimestamp
-    public Date dataCriaca;
+    public Date dataCriacao;
 
     @UpdateTimestamp
     public Date dataAtualizacao;
