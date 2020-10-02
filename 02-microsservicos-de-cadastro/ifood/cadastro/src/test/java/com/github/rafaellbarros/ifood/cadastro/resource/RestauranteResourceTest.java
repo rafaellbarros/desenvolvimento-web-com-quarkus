@@ -5,10 +5,17 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.rafaellbarros.ifood.cadastro.config.CadastroTestLifeCycleManager;
+import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 import org.approvaltests.Approvals;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 
@@ -27,5 +34,30 @@ public class RestauranteResourceTest {
                 .statusCode(200)
                 .extract().asString();
         Approvals.verifyJson(resultado);
+    }
+
+    @Test
+    @DataSet("restaurantes-cenario-1.yml")
+    public void testAlterarRestaurante() {
+        Restaurante restaurante = new Restaurante();
+        restaurante.nome= "novoNome";
+        Long parameterValue = 123L;
+        given()
+                .with().pathParam("id", parameterValue)
+                .body(restaurante)
+                .when().put("/restaurantes/{id}")
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode())
+                .extract().asString();
+
+        Restaurante findById = Restaurante.findById(parameterValue);
+
+        //poderia testar todos os outros atribudos
+        Assert.assertEquals(restaurante.nome, findById.nome);
+
+    }
+
+    private RequestSpecification given() {
+        return RestAssured.given().contentType(ContentType.JSON);
     }
 }
