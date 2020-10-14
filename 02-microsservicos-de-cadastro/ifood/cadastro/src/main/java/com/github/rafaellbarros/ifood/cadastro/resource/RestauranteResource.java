@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,7 +40,7 @@ public class RestauranteResource {
 
     @POST
     @Transactional
-    public void adicionar(AdicionarRestauranteDTO dto) {
+    public void adicionar(@Valid AdicionarRestauranteDTO dto) {
         final Restaurante restaurante = restauranteMapper.toRestaurante(dto);
         restaurante.persist();
     }

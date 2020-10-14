@@ -12,6 +12,10 @@ import org.mapstruct.MappingTarget;
 public interface RestauranteMapper {
 
     @Mapping(target = "nome", source = "nomeFantasia")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dataCriacao", ignore = true)
+    @Mapping(target = "dataAtualizacao", ignore = true)
+    @Mapping(target = "localizacao.id", ignore = true)
     public Restaurante toRestaurante(AdicionarRestauranteDTO dto);
 
     @Mapping(target = "nomeFantasia", source = "nome")
