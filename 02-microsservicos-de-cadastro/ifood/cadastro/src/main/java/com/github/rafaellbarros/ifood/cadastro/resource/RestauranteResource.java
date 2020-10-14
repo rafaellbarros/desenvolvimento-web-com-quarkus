@@ -1,10 +1,14 @@
 package com.github.rafaellbarros.ifood.cadastro.resource;
 
+import com.github.rafaellbarros.ifood.cadastro.infra.ConstraintViolationResponse;
 import com.github.rafaellbarros.ifood.cadastro.model.dto.*;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Prato;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.PratoMapper;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.RestauranteMapper;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.inject.Inject;
@@ -40,6 +44,13 @@ public class RestauranteResource {
 
     @POST
     @Transactional
+    @APIResponse(
+	responseCode = "201",
+	description = "Caso restaurante seja cadastrado com sucesso")
+    @APIResponse(
+	responseCode = "400",
+	content = @Content(schema = @Schema(allOf = ConstraintViolationResponse.class))
+    )
     public void adicionar(@Valid AdicionarRestauranteDTO dto) {
         final Restaurante restaurante = restauranteMapper.toRestaurante(dto);
         restaurante.persist();
