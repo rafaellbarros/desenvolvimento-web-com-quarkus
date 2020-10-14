@@ -6,6 +6,10 @@ import com.github.rafaellbarros.ifood.cadastro.model.entity.Prato;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.PratoMapper;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.RestauranteMapper;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -44,6 +48,9 @@ public class RestauranteResource {
     PratoMapper pratoMapper;
 
     @GET
+    @Counted(name = "Quantidade buscas Restaurante")
+    @SimplyTimed(name = "Tempo simples de busca")
+    @Timed(name = "Tempo completo de busca")
     public List<RestauranteDTO> listarTodos() {
         // TODO: Refactoring
         Stream<Restaurante> restaurantes = Restaurante.streamAll();

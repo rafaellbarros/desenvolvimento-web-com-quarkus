@@ -124,8 +124,11 @@
       <groupId>io.opentracing.contrib</groupId>
       <artifactId>opentracing-jdbc</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-metrics</artifactId>
+    </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
