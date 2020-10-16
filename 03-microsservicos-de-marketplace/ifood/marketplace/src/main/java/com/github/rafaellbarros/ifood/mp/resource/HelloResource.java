@@ -1,4 +1,4 @@
-package com.github.rafaellbarros.ifood.mp;
+package com.github.rafaellbarros.ifood.mp.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
