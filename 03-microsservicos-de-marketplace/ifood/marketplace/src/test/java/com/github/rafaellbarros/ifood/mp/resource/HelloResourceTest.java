@@ -1,4 +1,4 @@
-package com.github.rafaellbarros.ifood.mp;
+package com.github.rafaellbarros.ifood.mp.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
