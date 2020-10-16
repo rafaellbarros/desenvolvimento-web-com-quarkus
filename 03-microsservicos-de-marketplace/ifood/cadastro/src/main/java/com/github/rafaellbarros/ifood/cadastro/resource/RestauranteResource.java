@@ -19,9 +19,13 @@ import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -47,6 +51,10 @@ public class RestauranteResource {
     @Inject
     PratoMapper pratoMapper;
 
+    @Inject
+    @Channel("restaurantes")
+    Emitter<String> emitter;
+
     @GET
     @Counted(name = "Quantidade buscas Restaurante")
     @SimplyTimed(name = "Tempo simples de busca")
@@ -66,9 +74,15 @@ public class RestauranteResource {
 	responseCode = "400",
 	content = @Content(schema = @Schema(allOf = ConstraintViolationResponse.class))
     )
-    public void adicionar(@Valid AdicionarRestauranteDTO dto) {
+    public Response adicionar(@Valid AdicionarRestauranteDTO dto) {
         final Restaurante restaurante = restauranteMapper.toRestaurante(dto);
         restaurante.persist();
+
+        Jsonb create = JsonbBuilder.create();
+        final String json = create.toJson(restaurante);
+        emitter.send(json);
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
