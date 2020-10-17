@@ -35,6 +35,12 @@ public class Prato {
         return unitToMulti(preparedQuery);
     }
 
+    public static Uni<PratoDTO> findById(PgPool client, Long id) {
+        return client.preparedQuery("SELECT * FROM prato WHERE id = $1").execute(Tuple.of(id))
+                .map(RowSet::iterator)
+                .map(iterator -> iterator.hasNext() ? PratoDTO.from(iterator.next()) : null);
+    }
+
     private static Multi<PratoDTO> unitToMulti(Uni<RowSet<Row>> queryResult) {
         return queryResult.onItem()
                 .produceMulti(set -> Multi.createFrom().items(() -> {
