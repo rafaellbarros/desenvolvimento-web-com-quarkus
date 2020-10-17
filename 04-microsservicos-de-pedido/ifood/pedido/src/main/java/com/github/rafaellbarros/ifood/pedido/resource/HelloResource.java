@@ -1,4 +1,4 @@
-package com.github.rafaellbarros.ifood.pedido;
+package com.github.rafaellbarros.ifood.pedido.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
