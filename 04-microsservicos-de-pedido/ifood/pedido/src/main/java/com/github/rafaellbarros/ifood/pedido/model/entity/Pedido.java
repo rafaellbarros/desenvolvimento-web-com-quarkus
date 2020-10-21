@@ -17,4 +17,5 @@ public class Pedido extends PanacheMongoEntity {
     public String entregador;
 
     public Localizacao localizacaoEntregador;
+
 }

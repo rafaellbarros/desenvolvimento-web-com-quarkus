@@ -7,7 +7,6 @@ import com.github.rafaellbarros.ifood.mp.model.dto.RestauranteDTO;
 import com.github.rafaellbarros.ifood.mp.model.entity.Prato;
 import com.github.rafaellbarros.ifood.mp.model.entity.PratoCarrinho;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
@@ -22,10 +21,10 @@ import java.util.stream.Collectors;
 @Consumes(MediaType.APPLICATION_JSON)
 public class CarrinhoResource {
 
-    private static final String CLIENTE = "a";
+    private static final String CLIENTE = "xpto";
 
     @Inject
-    PgPool client;
+    io.vertx.mutiny.pgclient.PgPool client;
 
     @Inject
     @Channel("pedidos")
