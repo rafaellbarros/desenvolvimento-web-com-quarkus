@@ -1,8 +1,8 @@
-version: "3"
+version: "3.3"
 services:
   postgres_cadastro:
-    container_name: postegres_cadastro_ifood
-    image: postgres:13.0
+    container_name: postgres_cadastro_ifood
+    image: debezium/example-postgres # essa versao vem com as configuracoes necessarias para o connector do debezium
     environment:
       POSTGRES_USER: cadastro
       POSTGRES_PASSWORD: cadastro
