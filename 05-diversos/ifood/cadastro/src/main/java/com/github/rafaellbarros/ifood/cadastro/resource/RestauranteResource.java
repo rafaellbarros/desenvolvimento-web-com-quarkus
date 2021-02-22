@@ -6,6 +6,9 @@ import com.github.rafaellbarros.ifood.cadastro.model.entity.Prato;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.PratoMapper;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.RestauranteMapper;
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
@@ -54,6 +57,13 @@ public class RestauranteResource {
     @Inject
     @Channel("restaurantes")
     Emitter<String> emitter;
+
+    @Inject
+    JsonWebToken token;
+
+    @Inject
+    @Claim(standard = Claims.sub)
+    String sub;
 
     @GET
     @Counted(name = "Quantidade buscas Restaurante")
