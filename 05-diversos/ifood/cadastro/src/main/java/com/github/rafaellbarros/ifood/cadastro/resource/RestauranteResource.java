@@ -104,7 +104,7 @@ public class RestauranteResource {
         if (restauranteOptional.isEmpty()) {
             throw new NotFoundException();
         }
-        
+
         Restaurante restarante = restauranteOptional.get();
 
         if (!restarante.proprietario.equals(sub)) {
