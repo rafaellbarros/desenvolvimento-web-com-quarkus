@@ -86,6 +86,7 @@ public class RestauranteResource {
     )
     public Response adicionar(@Valid AdicionarRestauranteDTO dto) {
         final Restaurante restaurante = restauranteMapper.toRestaurante(dto);
+        restaurante.proprietario = sub;
         restaurante.persist();
 
         Jsonb create = JsonbBuilder.create();
@@ -103,7 +104,13 @@ public class RestauranteResource {
         if (restauranteOptional.isEmpty()) {
             throw new NotFoundException();
         }
+        
         Restaurante restarante = restauranteOptional.get();
+
+        if (!restarante.proprietario.equals(sub)) {
+            throw new ForbiddenException();
+        }
+
         restauranteMapper.toRestaurante(dto, restarante);
         restarante.persist();
     }
