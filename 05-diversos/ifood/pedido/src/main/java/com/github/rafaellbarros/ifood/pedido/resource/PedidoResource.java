@@ -3,20 +3,23 @@ package com.github.rafaellbarros.ifood.pedido.resource;
 import com.github.rafaellbarros.ifood.pedido.model.entity.Localizacao;
 import com.github.rafaellbarros.ifood.pedido.model.entity.Pedido;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
-
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.PermittedOptions;
+import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.mutiny.core.eventbus.EventBus;
 import org.bson.types.ObjectId;
-import io.vertx.core.Vertx;
-
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -40,7 +43,12 @@ public class PedidoResource {
         SockJSHandler handler = SockJSHandler.create(vertx);
         final PermittedOptions permitted = new PermittedOptions();
         permitted.setAddress("novaLocalicacao");
-        BridgeOptions bridgeOptions = new BridgeOptions().addOutboundPermitted(permitted);
+
+        //Alterado na versoa 1.9
+        //        BridgeOptions bridgeOptions = new BridgeOptions().addOutboundPermitted(permitted);
+        //        handler.bridge(bridgeOptions);
+
+        SockJSBridgeOptions bridgeOptions = new SockJSBridgeOptions().addOutboundPermitted(permitted);
         handler.bridge(bridgeOptions);
         return handler;
     }

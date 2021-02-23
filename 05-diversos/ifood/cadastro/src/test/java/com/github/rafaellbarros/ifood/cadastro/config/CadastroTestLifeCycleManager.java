@@ -16,7 +16,7 @@ public class CadastroTestLifeCycleManager implements QuarkusTestResourceLifecycl
     public Map<String, String> start() {
         POTGRES.start();
         Map<String, String> propriedades = new HashMap<>();
-        propriedades.put("quarkus.datasource.url", POTGRES.getJdbcUrl());
+        propriedades.put("quarkus.datasource.jdbc.url", POTGRES.getJdbcUrl());
         propriedades.put("quarkus.datasource.username", POTGRES.getUsername());
         propriedades.put("quarkus.datasource.password", POTGRES.getPassword());
         return propriedades;

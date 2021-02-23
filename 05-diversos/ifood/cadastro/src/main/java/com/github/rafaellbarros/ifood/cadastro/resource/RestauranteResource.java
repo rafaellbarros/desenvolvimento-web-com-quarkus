@@ -1,7 +1,12 @@
 package com.github.rafaellbarros.ifood.cadastro.resource;
 
 import com.github.rafaellbarros.ifood.cadastro.infra.ConstraintViolationResponse;
-import com.github.rafaellbarros.ifood.cadastro.model.dto.*;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.AdicionarPratoDTO;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.AdicionarRestauranteDTO;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.AtualizarPratoDTO;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.AtualizarRestauranteDTO;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.PratoDTO;
+import com.github.rafaellbarros.ifood.cadastro.model.dto.RestauranteDTO;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Prato;
 import com.github.rafaellbarros.ifood.cadastro.model.entity.Restaurante;
 import com.github.rafaellbarros.ifood.cadastro.model.mapper.PratoMapper;
@@ -10,7 +15,6 @@ import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
@@ -19,7 +23,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.security.OAuthFlow;
 import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.reactive.messaging.Channel;
@@ -27,11 +30,18 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -56,7 +66,7 @@ public class RestauranteResource {
 
     @Inject
     @Channel("restaurantes")
-    Emitter<String> emitter;
+    Emitter<Restaurante> emitter;
 
     @Inject
     JsonWebToken token;
@@ -89,10 +99,7 @@ public class RestauranteResource {
         restaurante.proprietario = sub;
         restaurante.persist();
 
-        Jsonb create = JsonbBuilder.create();
-        final String json = create.toJson(restaurante);
-        emitter.send(json);
-
+        emitter.send(restaurante);
         return Response.status(Response.Status.CREATED).build();
     }
 
